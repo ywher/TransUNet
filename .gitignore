@@ -1,0 +1,5 @@
+data/
+model/
+exp/
+*.pyc
+__pycache__/

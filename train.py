@@ -7,7 +7,7 @@ import torch
 import torch.backends.cudnn as cudnn
 from networks.vit_seg_modeling import VisionTransformer as ViT_seg
 from networks.vit_seg_modeling import CONFIGS as CONFIGS_ViT_seg
-from trainer import trainer_synapse
+from trainer import trainer_synapse, trainer_camus
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--root_path', type=str,
@@ -39,6 +39,12 @@ parser.add_argument('--vit_name', type=str,
                     default='R50-ViT-B_16', help='select one vit model')
 parser.add_argument('--vit_patches_size', type=int,
                     default=16, help='vit_patches_size, default is 16')
+parser.add_argument('--camus_split', type=str,
+                    default='all', help='which CAMUS split to use under lists/camus')
+parser.add_argument('--eval_interval', type=int,
+                    default=5, help='evaluate every N epochs')
+parser.add_argument('--early_stop_patience', type=int,
+                    default=10, help='number of eval steps with no mIoU improvement before stopping')
 args = parser.parse_args()
 
 
@@ -55,19 +61,27 @@ if __name__ == "__main__":
     torch.manual_seed(args.seed)
     torch.cuda.manual_seed(args.seed)
     dataset_name = args.dataset
+    dataset_key = dataset_name.lower()
     dataset_config = {
-        'Synapse': {
+        'synapse': {
             'root_path': '../data/Synapse/train_npz',
             'list_dir': './lists/lists_Synapse',
             'num_classes': 9,
         },
+        'camus': {
+            'root_path': './data/camus',
+            'list_dir': './lists/camus',
+            'num_classes': 4,
+        },
     }
-    args.num_classes = dataset_config[dataset_name]['num_classes']
-    args.root_path = dataset_config[dataset_name]['root_path']
-    args.list_dir = dataset_config[dataset_name]['list_dir']
+    if dataset_key not in dataset_config:
+        raise ValueError(f"Unsupported dataset {dataset_name}")
+    args.num_classes = dataset_config[dataset_key]['num_classes']
+    args.root_path = dataset_config[dataset_key]['root_path']
+    args.list_dir = dataset_config[dataset_key]['list_dir']
     args.is_pretrain = True
     args.exp = 'TU_' + dataset_name + str(args.img_size)
-    snapshot_path = "../model/{}/{}".format(args.exp, 'TU')
+    snapshot_path = "exp/model/{}/{}".format(args.exp, 'TU')
     snapshot_path = snapshot_path + '_pretrain' if args.is_pretrain else snapshot_path
     snapshot_path += '_' + args.vit_name
     snapshot_path = snapshot_path + '_skip' + str(args.n_skip)
@@ -89,5 +103,5 @@ if __name__ == "__main__":
     net = ViT_seg(config_vit, img_size=args.img_size, num_classes=config_vit.n_classes).cuda()
     net.load_from(weights=np.load(config_vit.pretrained_path))
 
-    trainer = {'Synapse': trainer_synapse,}
-    trainer[dataset_name](args, net, snapshot_path)
+    trainer = {'synapse': trainer_synapse, 'camus': trainer_camus}
+    trainer[dataset_key](args, net, snapshot_path)

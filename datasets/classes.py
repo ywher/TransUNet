@@ -1,0 +1,18 @@
+CLASSES = {'pascal': ['background', 'aeroplane', 'bicycle', 'bird', 'boat', 'bottle', 'bus', 
+                      'car', 'cat', 'chair', 'cow', 'dining table', 'dog', 'horse', 'motorbike', 
+                      'person', 'potted plant', 'sheep', 'sofa', 'train', 'tv/monitor'],
+           
+           'cityscapes': ['road', 'sidewalk', 'building', 'wall', 'fence', 'pole', 'traffic light',
+                          'traffic sign', 'vegetation', 'terrain', 'sky', 'person', 'rider', 'car',
+                          'truck', 'bus', 'train', 'motorcycle', 'bicycle'],
+           'our': ['road', 'sidewalk', 'building', 'wall', 'fence', 'pole', 'traffic light',
+                          'traffic sign', 'vegetation', 'terrain', 'sky', 'person', 'rider', 'car',
+                          'truck', 'bus', 'train', 'motorcycle', 'bicycle'],
+           'acdc': ['road', 'sidewalk', 'building', 'wall', 'fence', 'pole', 'traffic light',
+                          'traffic sign', 'vegetation', 'terrain', 'sky', 'person', 'rider', 'car',
+                          'truck', 'bus', 'train', 'motorcycle', 'bicycle'],
+           'muses': ['road', 'sidewalk', 'building', 'wall', 'fence', 'pole', 'traffic light',
+                          'traffic sign', 'vegetation', 'terrain', 'sky', 'person', 'rider', 'car',
+                          'truck', 'bus', 'train', 'motorcycle', 'bicycle'],
+           'camus': ['background', 'LV_endo', 'LV_epi', 'LA'],
+           }
