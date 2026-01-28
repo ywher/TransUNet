@@ -33,6 +33,9 @@ All data are available so no need to send emails for data. Please use the [BTCV 
 
 ### 3. Environment
 
+conda create -n medseg python==3.10 -y
+pip install torch==2.2.0 torchvision==0.17.0 torchaudio==2.2.0 --index-url https://download.pytorch.org/whl/cu118
+
 Please prepare an environment with python=3.7, and then use the command "pip install -r requirements.txt" for the dependencies.
 
 ### 4. Train/Test
